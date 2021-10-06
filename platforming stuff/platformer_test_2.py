@@ -173,7 +173,7 @@ class Level_01(Level):
         # call parent constuctor
         Level.__init__(self, player)
 
-        self.level_limit = 50
+        self.level_limit = -1000
 
         # array with width, height, x, and y of platform
         level = [[210, 70, 500, 500],
@@ -182,7 +182,17 @@ class Level_01(Level):
         [210, 70, 200, 200], 
         [210, 70, 100, 75],
         [210, 70, 600, 100],
-        [210, 70, 750, 200]]
+        [210, 70, 750, 200],
+        [210, 70, 500, 500],
+        [210, 70, 800, 400],
+        [210, 70, 1000, 500],
+        [210, 70, 1120, 280],
+        [210, 70, 1300, 300], 
+        [210, 70, 1450, 200],
+        [210, 70, 1600, 500],
+        [210, 70, 1800, 100],
+        [20, SCREEN_HEIGHT, 2100, 0]
+        ]
 
         # go through the array above and add platforms
         for platform in level: 
@@ -197,13 +207,24 @@ class Level_02(Level):
         
         Level.__init__(self, player)
 
-        self.level_limit = 50
+        self.level_limit = -1000
 
         level = [[210, 70, 200, 500],
         [210, 70, 200, 300], 
         [210, 50, 600, 300],
         [210, 70, 25, 200], 
-        [210, 70, 50, 60]]
+        [210, 70, 50, 60],
+        [210, 90, 700, 200],
+        [120, 50, 850, 400],
+        [20, 70, 1000, 100],
+        [210, 70, 1100, 300],
+        [300, 50, 1200, 175],
+        [100, 60, 1600, 100],
+        [210, 70, 1300, 500],
+        [300, 70, 1700, 400],
+        [210, 70, 1700, 200],
+        [20, SCREEN_HEIGHT, 2100, 0]
+        ]
 
         for platform in level: 
             block = Platform(platform[0], platform[1])
@@ -218,14 +239,19 @@ class Level_03(Level):
     def __init__(self, player): 
         Level.__init__(self, player)
 
-        self.level_limit = 50
+        self.level_limit = -1000
 
         # array with width, height, x, and y of platform
         level = [[210, 70, 100, 200],
-        [210, 70, 50, 20], 
-        [210, 70, 300, 500],
-        [210, 70, 100, 200], 
-        [210, 70, 200, 75]]
+        [100, 50, 300, 400],
+        [300, 20, 400, 100],
+        [200, 90, 600, 500],
+        [100, 50, 900, 450],
+        [150, 20, 1100, 350],
+        [20, 150, 1300, 300],
+        [250, 50, 1500, 200],
+        [100, 20, 1800, 100],
+        [20, SCREEN_HEIGHT, 2100, 0]]
 
         # go through the array above and add platforms
         for platform in level: 
@@ -235,9 +261,17 @@ class Level_03(Level):
             block.player = self.player
             self.platform_list.add(block)
 
+class Level_04(Level):
+    def __init__(self, player):
+        Level.__init__(self, player)
+        self.level_limit = -1000
+
+        level = []
+
 
 def main():
     pygame.init()
+    
 
     # set height and width of the screen
     size = [SCREEN_WIDTH, SCREEN_HEIGHT]
@@ -253,6 +287,7 @@ def main():
     level_list.append(Level_01(player))
     level_list.append(Level_02(player))
     level_list.append(Level_03(player))
+    level_list.append(Level_04(player))
 
     # set the current level
     current_level_no = 0
@@ -299,7 +334,7 @@ def main():
         current_level.update()
 
         font = pygame.font.SysFont('Verdana', 25, True, False) 
-        text = font.render("LEVEL " + str(current_level_no), True, colourrr4)
+        text = font.render("LEVEL " + str(current_level_no + 1), True, colourrr4)
         screen.blit(text, [0, 0])
         pygame.display.update()
 
@@ -314,15 +349,23 @@ def main():
             diff = 120 - player.rect.left
             player.rect.left = 120
             current_level.shift_world(diff)
-    
+
         #if player gets to end of level, go to next level
         current_position = player.rect.x + current_level.world_shift
-        if current_position < current_level.level_limit: 
+        if current_position < current_level.level_limit:
             player.rect.x = 120
             if current_level_no < len(level_list)-1:
                 current_level_no += 1
                 current_level = level_list[current_level_no]
-                player.level = current_level
+                print(current_level_no)
+            if current_level_no + 1 > 3:
+                font = pygame.font.SysFont('Verdana', 50, True, False) 
+                text = font.render("YOU WON", True, WHITE)
+                screen.fill(BLACK)
+                screen.blit(text, [225, 250])
+                pygame.display.update()
+                pygame.time.delay(1500)
+                main()
 
         # if player falls to the bottom, game over
         if player.rect.bottom == SCREEN_HEIGHT: 
@@ -331,7 +374,7 @@ def main():
             screen.fill(BLACK)
             screen.blit(text, [215, 250])
             pygame.display.update()
-            pygame.time.delay(1000)
+            pygame.time.delay(1500)
             main()
 
         #draw
