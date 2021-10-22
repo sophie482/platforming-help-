@@ -268,6 +268,14 @@ class Level_04(Level):
 
         level = []
 
+def Text(coordinates, words):
+      font = pygame.font.SysFont('Verdana', 50, True, False) 
+      text = font.render(words, True, WHITE)
+      screen.fill(BLACK)
+      screen.blit(text, [coordinates])
+      pygame.display.update()
+      pygame.time.delay(1500)
+      main()
 
 def main():
     pygame.init()
@@ -357,12 +365,12 @@ def main():
             if current_level_no < len(level_list)-1:
                 current_level_no += 1
                 current_level = level_list[current_level_no]
-                print(current_level_no)
+                player.level = current_level
             if current_level_no + 1 > 3:
                 font = pygame.font.SysFont('Verdana', 50, True, False) 
                 text = font.render("YOU WON", True, WHITE)
                 screen.fill(BLACK)
-                screen.blit(text, [225, 250])
+                screen.blit(text, [215, 250])
                 pygame.display.update()
                 pygame.time.delay(1500)
                 main()
